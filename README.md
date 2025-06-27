@@ -1,6 +1,6 @@
 <div align="center">
 
-![upscalemedia-transformed](https://github.com/user-attachments/assets/734d424d-eb77-4992-aca5-6e017786d427)
+![vibemapper_logo](https://github.com/user-attachments/assets/31f24ffd-32e0-4605-889b-70d3451b9816)
 
 </div>
 
