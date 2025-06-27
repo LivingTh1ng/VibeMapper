@@ -1,6 +1,6 @@
 <div align="center">
 
-![light color texts_logo and name vertical](https://github.com/user-attachments/assets/6f408bec-6dce-465f-8d38-ed414d9dd3fc)
+![upscalemedia-transformed](https://github.com/user-attachments/assets/734d424d-eb77-4992-aca5-6e017786d427)
 
 </div>
 
