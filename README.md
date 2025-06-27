@@ -1,5 +1,8 @@
+<div align="center">
+
 ![vibemapper_logo](https://github.com/user-attachments/assets/a771f156-f4e5-476c-a9e9-f799a127962a)
 
+</div>
 # VibeMapper
 A Windows application that uses [Intiface Central](https://intiface.com/central/) and the [Buttplug](https://buttplug.io/) protocol to map keyboard, mouse, and controller inputs to connected devices.
 
