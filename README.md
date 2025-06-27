@@ -1,6 +1,6 @@
 <div align="center">
 
-![vibemapper_logo](https://github.com/user-attachments/assets/a771f156-f4e5-476c-a9e9-f799a127962a)
+![light color texts_logo and name vertical](https://github.com/user-attachments/assets/6f408bec-6dce-465f-8d38-ed414d9dd3fc)
 
 </div>
 
