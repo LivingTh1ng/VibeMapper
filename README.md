@@ -1,7 +1,5 @@
 <div align="center">
-
-![light color texts_logo and name vertical](https://github.com/user-attachments/assets/d7b40979-fef7-44cc-afee-e6776446380c)
-
+![VibeMapper logo plus name_logo and name horizontal](https://github.com/user-attachments/assets/553d67a3-cce9-405a-88e5-7516aa052c9c)
 </div>
 
 # VibeMapper
