@@ -35,6 +35,7 @@ A Windows application that uses [Intiface Central](https://intiface.com/central/
 6. Select input key, what device to bind it to, duration and intensity (you can bind multiple devices here at a time with different settings each) click ok to add binding for this key.
 7. Save profile, and start the relevant hooks when ready to play, to deactivate hit stop hook buttons or press F8 as an emergency off switch.
 
+This did not happen on my machines but Windows Defender might tell you it's a virus, this is probably because of the mouse, keyboard, and controller hooks, feel free to tell it to kick rocks.
 
 ## Special Thanks
 Special thanks to [Izzy Sullivan](https://www.instagram.com/izzy_sullivan_designs/) for the adorable logo.
