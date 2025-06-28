@@ -12,6 +12,11 @@
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
 
 # Mono auto generated files
 mono_crash.*
@@ -45,6 +50,13 @@ Generated\ Files/
 # MSTest test Results
 [Tt]est[Rr]esult*/
 [Bb]uild[Ll]og.*
+
+# NuGet Packages
+*.nupkg
+**/[Pp]ackages/*
+project.lock.json
+project.fragment.lock.json
+artifacts/
 
 # NUnit
 *.VisualState.xml
