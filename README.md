@@ -1,5 +1,7 @@
 <div align="center">
+  
 ![VibeMapper logo plus name_logo and name horizontal](https://github.com/user-attachments/assets/553d67a3-cce9-405a-88e5-7516aa052c9c)
+
 </div>
 
 # VibeMapper
