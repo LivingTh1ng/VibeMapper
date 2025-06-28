@@ -1,0 +1,258 @@
+﻿<Window x:Class="ToyControlApp.MouseBindingDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Add Mouse Binding" 
+        Height="550" 
+        Width="450"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="CanResize"
+        ShowInTaskbar="True"
+        MinHeight="450"
+        MinWidth="450"
+        Style="{StaticResource DarkWindowStyle}">
+
+    <!-- Add color resources -->
+    <Window.Resources>
+        <SolidColorBrush x:Key="DarkAccentBrush" Color="#FFED9BB2"/>
+        <SolidColorBrush x:Key="PinkAccentBrush" Color="#FFED9BB2"/>
+        <SolidColorBrush x:Key="CustomGreyBoxBrush" Color="#FF312E42"/>
+        <SolidColorBrush x:Key="CustomGreyBorderBrush" Color="#FF312E42"/>
+    </Window.Resources>
+
+    <Grid Margin="10" Background="{StaticResource DarkBackgroundBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Label Grid.Row="0" Content="Mouse Input:" FontWeight="Bold" Margin="0,0,0,5" Style="{StaticResource DarkLabelStyle}"/>
+        <ComboBox Grid.Row="1" Name="MouseInputComboBox" 
+                  Height="25" VerticalContentAlignment="Center"
+                  Margin="0,0,0,15"
+                  Style="{StaticResource DarkComboBoxStyle}"
+                  SelectionChanged="MouseInputComboBox_SelectionChanged"/>
+
+        <Label Grid.Row="2" Content="Device Bindings:" FontWeight="Bold" Margin="0,0,0,5" Style="{StaticResource DarkLabelStyle}"/>
+
+        <!-- Device Bindings Section -->
+        <Grid Grid.Row="3" Margin="0,0,0,15">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Device Bindings Grid -->
+            <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto" 
+                         HorizontalScrollBarVisibility="Disabled" MinHeight="50"
+                         Style="{StaticResource DarkScrollViewerStyle}">
+                <ItemsControl Name="DeviceBindingsItemsControl" 
+                             ItemsSource="{Binding DeviceBindings}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <!-- 2-Column UniformGrid -->
+                            <UniformGrid Columns="2" HorizontalAlignment="Stretch"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border BorderBrush="{StaticResource CustomGreyBorderBrush}" BorderThickness="1" 
+                                    Padding="8" Margin="3" CornerRadius="3"
+                                    Background="{StaticResource CustomGreyBoxBrush}">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <!-- Device Name -->
+                                    <TextBlock Grid.Row="0" Grid.Column="0" 
+                                              Text="{Binding DeviceName}" 
+                                              FontWeight="Bold" FontSize="13"
+                                              TextTrimming="CharacterEllipsis"
+                                              ToolTip="{Binding DeviceName}"
+                                              Foreground="{StaticResource PinkAccentBrush}"/>
+
+                                    <!-- Remove Button -->
+                                    <Button Grid.Row="0" Grid.RowSpan="2" Grid.Column="1"
+                                           Content="×" 
+                                           Width="18" Height="18"
+                                           FontSize="11" FontWeight="Bold"
+                                           Style="{StaticResource DarkDangerButtonStyle}"
+                                           Click="RemoveDeviceBinding_Click"
+                                           Tag="{Binding}"
+                                           VerticalAlignment="Top"
+                                           HorizontalAlignment="Right"
+                                           ToolTip="Remove this device binding"/>
+
+                                    <!-- Settings Info -->
+                                    <StackPanel Grid.Row="1" Grid.Column="0" 
+                                               Orientation="Horizontal"
+                                               Margin="0,2,0,0">
+                                        <TextBlock Text="Intensity: " FontSize="10" Foreground="#FFB0B0B0"/>
+                                        <TextBlock Text="{Binding Intensity, StringFormat=P0}" 
+                                                  FontSize="10" Foreground="{StaticResource PinkAccentBrush}" FontWeight="SemiBold"/>
+
+                                        <!-- Show different info based on hold mode -->
+                                        <TextBlock FontSize="10" Foreground="#FFB0B0B0">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsHoldMode}" Value="True">
+                                                            <Setter Property="Text" Value=" | Hold Mode"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding IsHoldMode}" Value="False">
+                                                            <Setter Property="Text" Value=" | Duration: "/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+
+                                        <!-- Duration (only show if not hold mode) -->
+                                        <TextBlock FontSize="10" Foreground="{StaticResource PinkAccentBrush}" FontWeight="SemiBold">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsHoldMode}" Value="True">
+                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding IsHoldMode}" Value="False">
+                                                            <Setter Property="Text" Value="{Binding DurationMs}"/>
+                                                            <Setter Property="Visibility" Value="Visible"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+
+                                        <TextBlock Text="ms" FontSize="10" Foreground="#FFB0B0B0">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsHoldMode}" Value="True">
+                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+
+            <!-- Add Device Section -->
+            <GroupBox Grid.Row="1" Header="Add Device" Margin="0,10,0,0" Style="{StaticResource DarkGroupBoxStyle}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <Label Grid.Row="0" Content="Device:" FontWeight="Bold" Margin="0,0,0,5" Style="{StaticResource DarkLabelStyle}"/>
+                    <ComboBox Grid.Row="1" Name="DeviceComboBox" 
+                              DisplayMemberPath="Name" 
+                              Height="25"
+                              VerticalContentAlignment="Center"
+                              Margin="0,0,0,10"
+                              Style="{StaticResource DarkComboBoxStyle}"/>
+
+                    <Label Grid.Row="2" Content="Intensity (%):" FontWeight="Bold" Margin="0,0,0,5" Style="{StaticResource DarkLabelStyle}"/>
+                    <Grid Grid.Row="3" Margin="0,0,0,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Slider Grid.Column="0" Name="IntensitySlider" 
+                                Minimum="0" Maximum="100" Value="50" 
+                                TickFrequency="5" 
+                                TickPlacement="BottomRight"
+                                IsSnapToTickEnabled="True"
+                                VerticalAlignment="Center"
+                                Margin="0,0,10,0"
+                                Style="{StaticResource DarkSliderStyle}"/>
+                        <TextBlock Grid.Column="1" 
+                                   VerticalAlignment="Center"
+                                   MinWidth="40"
+                                   TextAlignment="Right"
+                                   Foreground="{StaticResource PinkAccentBrush}"
+                                   FontWeight="SemiBold">
+                            <TextBlock.Text>
+                                <Binding ElementName="IntensitySlider" Path="Value" StringFormat="{}{0:F0}%"/>
+                            </TextBlock.Text>
+                        </TextBlock>
+                    </Grid>
+
+                    <!-- Hold Mode Checkbox -->
+                    <CheckBox Grid.Row="4" Name="HoldModeCheckBox" 
+                              Content="Hold Mode (vibrate while mouse button is held)" 
+                              FontWeight="Bold" 
+                              Margin="0,0,0,10"
+                              Checked="HoldModeCheckBox_CheckedChanged"
+                              Unchecked="HoldModeCheckBox_CheckedChanged"
+                              Style="{StaticResource DarkCheckBoxStyle}"/>
+
+                    <Label Grid.Row="5" Name="DurationLabel" Content="Duration (ms):" FontWeight="Bold" Margin="0,0,0,5" Style="{StaticResource DarkLabelStyle}"/>
+                    <Grid Grid.Row="6" Name="DurationGrid">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox Grid.Column="0" Name="DurationTextBox" 
+                                 Text="1000" 
+                                 Height="25"
+                                 VerticalContentAlignment="Center"
+                                 Background="{StaticResource DarkSurfaceBrush}"
+                                 Foreground="{StaticResource DarkTextBrush}"
+                                 BorderBrush="{StaticResource DarkBorderBrush}"
+                                 BorderThickness="1"
+                                 Margin="0,0,10,0"/>
+                        <Button Grid.Column="1" Content="Add Device" 
+                                Name="AddDeviceButton"
+                                Style="{StaticResource DarkPrimaryButtonStyle}"
+                                Click="AddDeviceButton_Click"
+                                Width="80" Height="25"/>
+                    </Grid>
+                </Grid>
+            </GroupBox>
+        </Grid>
+
+        <StackPanel Grid.Row="4" 
+                    Orientation="Horizontal" 
+                    HorizontalAlignment="Right"
+                    Margin="0,10,0,0">
+            <Button Name="OkButton" 
+                    Content="OK" 
+                    Style="{StaticResource DarkPrimaryButtonStyle}"
+                    Width="75" 
+                    Height="30" 
+                    Margin="0,0,10,0" 
+                    Click="OkButton_Click" 
+                    IsEnabled="False"
+                    IsDefault="True"/>
+            <Button Name="CancelButton" 
+                    Content="Cancel" 
+                    Style="{StaticResource DarkButtonStyle}"
+                    Width="75" 
+                    Height="30" 
+                    IsCancel="True"/>
+        </StackPanel>
+    </Grid>
+</Window>

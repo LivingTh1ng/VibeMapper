@@ -1,0 +1,489 @@
+﻿<Window x:Class="ToyControlApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="VibeMapper" Height="850" Width="500"
+        WindowStartupLocation="CenterScreen"
+        Style="{StaticResource DarkWindowStyle}">
+
+    <!-- Add or update the color resources -->
+    <Window.Resources>
+        <SolidColorBrush x:Key="DarkAccentBrush" Color="#FF9092"/>
+        <SolidColorBrush x:Key="PinkAccentBrush" Color="#FF9092"/>
+    </Window.Resources>
+
+    <Grid Background="{StaticResource DarkBackgroundBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Connection Section -->
+        <GroupBox Grid.Row="0" Header="Connection" Margin="10" Style="{StaticResource DarkGroupBoxStyle}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Connection Controls -->
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Text="{Binding ConnectionStatus}" 
+                              VerticalAlignment="Center" Margin="10"/>
+
+                    <Button Grid.Column="1" Content="Connect" 
+                            Command="{Binding ConnectCommand}"
+                            Style="{StaticResource DarkPrimaryButtonStyle}"
+                            Width="80" Height="25" Margin="5"/>
+
+                    <Button Grid.Column="2" Content="Disconnect" 
+                            Command="{Binding DisconnectCommand}"
+                            Style="{StaticResource DarkButtonStyle}"
+                            Width="80" Height="25" Margin="5"/>
+                </Grid>
+
+                <!-- Profile Controls -->
+                <Grid Grid.Row="1" Margin="10,5,10,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0" Text="Profile:" 
+                              VerticalAlignment="Center" FontWeight="Bold" Margin="0,0,10,0"/>
+
+                    <TextBlock Grid.Column="1" Text="{Binding CurrentProfileName}" 
+                              VerticalAlignment="Center" FontWeight="SemiBold" 
+                              Foreground="{StaticResource DarkAccentBrush}" Margin="0,0,10,0"/>
+
+                    <Button Grid.Column="2" Content="Save Profile" 
+                            Command="{Binding SaveProfileCommand}"
+                            Style="{StaticResource DarkPrimaryButtonStyle}"
+                            Width="80" Height="25" Margin="0,0,5,0"/>
+
+                    <Button Grid.Column="3" Content="Manage Profiles" 
+                            Command="{Binding ManageProfilesCommand}"
+                            Style="{StaticResource DarkButtonStyle}"
+                            Width="110" Height="25"/>
+                </Grid>
+            </Grid>
+        </GroupBox>
+
+        <!-- Devices Section -->
+        <GroupBox Grid.Row="1" Header="Connected Devices" Margin="10,0,10,10" Style="{StaticResource DarkGroupBoxStyle}">
+            <StackPanel>
+                <ListBox ItemsSource="{Binding Devices}" 
+                         DisplayMemberPath="Name"
+                         Height="80" Margin="5"
+                         Style="{StaticResource DarkListBoxStyle}"/>
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="5">
+                    <Button Content="Stop All Devices" 
+                            Command="{Binding StopAllDevicesCommand}"
+                            Style="{StaticResource DarkDangerButtonStyle}"
+                            Width="120" Height="25"/>
+                </StackPanel>
+            </StackPanel>
+        </GroupBox>
+
+        <!-- Key Bindings Section -->
+        <GroupBox Grid.Row="2" Header="Key Bindings" Margin="10,0,10,5" Style="{StaticResource DarkGroupBoxStyle}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!-- Keyboard Hook Controls -->
+                <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="5">
+                    <Button Content="Start Keyboard Hook" 
+                            Command="{Binding StartKeyboardHookCommand}"
+                            Style="{StaticResource DarkPrimaryButtonStyle}"
+                            Width="130" Height="25" Margin="0,0,5,0"/>
+
+                    <Button Content="Stop Keyboard Hook" 
+                            Command="{Binding StopKeyboardHookCommand}"
+                            Style="{StaticResource DarkButtonStyle}"
+                            Width="130" Height="25" Margin="0,0,5,0"/>
+
+                    <TextBlock Text="{Binding KeyboardHookActive, StringFormat='Active: {0}'}" 
+                              VerticalAlignment="Center" Margin="5,0,0,0"
+                              FontWeight="Bold" FontSize="11"/>
+                </StackPanel>
+
+                <!-- Key Bindings List -->
+                <Grid Grid.Row="1" Margin="5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <ListBox Grid.Column="0" ItemsSource="{Binding KeyBindings}"
+                             SelectedItem="{Binding SelectedKeyBinding}"
+                             Style="{StaticResource DarkListBoxStyle}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Border BorderBrush="{StaticResource DarkBorderBrush}" BorderThickness="1" 
+                                        Padding="8" Margin="2" CornerRadius="3"
+                                        Background="{StaticResource DarkSurfaceLightBrush}">
+                                    <StackPanel>
+                                        <!-- Key and Device Count -->
+                                        <StackPanel Orientation="Horizontal" Margin="0,0,0,3">
+                                            <TextBlock Text="{Binding Key, StringFormat='Key: {0}'}" 
+                                                      FontWeight="Bold" FontSize="12"
+                                                      Foreground="{StaticResource DarkAccentBrush}"/>
+                                            <TextBlock Text="{Binding DeviceBindings.Count, StringFormat=' → {0} device(s)'}" 
+                                                      FontWeight="Bold" FontSize="12" 
+                                                      Foreground="{StaticResource DarkAccentBrush}"/>
+                                        </StackPanel>
+
+                                        <!-- Device List -->
+                                        <ItemsControl ItemsSource="{Binding DeviceBindings}">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <StackPanel Orientation="Horizontal" Margin="10,1,0,1">
+                                                        <TextBlock Text="• " Foreground="{StaticResource DarkTextSecondaryBrush}" FontSize="10"/>
+                                                        <TextBlock Text="{Binding DeviceName}" FontWeight="SemiBold" FontSize="10"/>
+                                                        <TextBlock Text=" (" Foreground="{StaticResource DarkTextSecondaryBrush}" FontSize="10"/>
+                                                        <TextBlock Text="{Binding Intensity, StringFormat=P0}" Foreground="{StaticResource DarkTextSecondaryBrush}" FontSize="10"/>
+                                                        <TextBlock FontSize="10" Foreground="{StaticResource DarkTextSecondaryBrush}">
+                                                            <TextBlock.Style>
+                                                                <Style TargetType="TextBlock" BasedOn="{StaticResource DarkTextBlockStyle}">
+                                                                    <Style.Triggers>
+                                                                        <DataTrigger Binding="{Binding IsHoldMode}" Value="True">
+                                                                            <Setter Property="Text" Value=", Hold Mode)"/>
+                                                                        </DataTrigger>
+                                                                        <DataTrigger Binding="{Binding IsHoldMode}" Value="False">
+                                                                            <Setter Property="Text" Value=", "/>
+                                                                        </DataTrigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </TextBlock.Style>
+                                                        </TextBlock>
+                                                        <TextBlock Text="{Binding DurationMs}" Foreground="{StaticResource DarkTextSecondaryBrush}" FontSize="10">
+                                                            <TextBlock.Style>
+                                                                <Style TargetType="TextBlock" BasedOn="{StaticResource DarkTextBlockStyle}">
+                                                                    <Style.Triggers>
+                                                                        <DataTrigger Binding="{Binding IsHoldMode}" Value="True">
+                                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                                        </DataTrigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </TextBlock.Style>
+                                                        </TextBlock>
+                                                        <TextBlock Text="ms)" Foreground="{StaticResource DarkTextSecondaryBrush}" FontSize="10">
+                                                            <TextBlock.Style>
+                                                                <Style TargetType="TextBlock" BasedOn="{StaticResource DarkTextBlockStyle}">
+                                                                    <Style.Triggers>
+                                                                        <DataTrigger Binding="{Binding IsHoldMode}" Value="True">
+                                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                                        </DataTrigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </TextBlock.Style>
+                                                        </TextBlock>
+                                                    </StackPanel>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+
+                    <StackPanel Grid.Column="1" Margin="5,0,0,0">
+                        <Button Content="Add Binding" 
+                                Command="{Binding AddKeyBindingCommand}"
+                                Style="{StaticResource DarkPrimaryButtonStyle}"
+                                Width="90" Height="25" Margin="0,0,0,5" FontSize="10"/>
+
+                        <Button Content="Remove Binding" 
+                                Command="{Binding RemoveKeyBindingCommand}"
+                                CommandParameter="{Binding SelectedKeyBinding}"
+                                Style="{StaticResource DarkDangerButtonStyle}"
+                                Width="90" Height="25" FontSize="10"/>
+                    </StackPanel>
+                </Grid>
+            </Grid>
+        </GroupBox>
+
+        <!-- Controller Bindings Section -->
+        <GroupBox Grid.Row="3" Header="Controller Bindings" Margin="10,5,10,5" Style="{StaticResource DarkGroupBoxStyle}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!-- Controller Hook Controls -->
+                <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="5">
+                    <Button Content="Start Controller Hook" 
+                            Command="{Binding StartControllerHookCommand}"
+                            Style="{StaticResource DarkPrimaryButtonStyle}"
+                            Width="130" Height="25" Margin="0,0,5,0"/>
+
+                    <Button Content="Stop Controller Hook" 
+                            Command="{Binding StopControllerHookCommand}"
+                            Style="{StaticResource DarkButtonStyle}"
+                            Width="130" Height="25" Margin="0,0,5,0"/>
+
+                    <TextBlock Text="{Binding ControllerHookActive, StringFormat='Active: {0}'}" 
+                              VerticalAlignment="Center" Margin="5,0,0,0"
+                              FontWeight="Bold" FontSize="11"/>
+                </StackPanel>
+
+                <!-- Controller Bindings List -->
+                <Grid Grid.Row="1" Margin="5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <ListBox Grid.Column="0" ItemsSource="{Binding ControllerBindings}"
+                             SelectedItem="{Binding SelectedControllerBinding}"
+                             Style="{StaticResource DarkListBoxStyle}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Border BorderBrush="{StaticResource DarkBorderBrush}" BorderThickness="1" 
+                                        Padding="8" Margin="2" CornerRadius="3"
+                                        Background="{StaticResource DarkSurfaceLightBrush}">
+                                    <StackPanel>
+                                        <!-- Controller Input and Device Count -->
+                                        <StackPanel Orientation="Horizontal" Margin="0,0,0,3">
+                                            <TextBlock Text="{Binding Input}" 
+                                                      FontWeight="Bold" FontSize="12"
+                                                      Foreground="{StaticResource DarkAccentBrush}"/>
+                                            <TextBlock Text="{Binding DeviceBindings.Count, StringFormat=' → {0} device(s)'}" 
+                                                      FontWeight="Bold" FontSize="12" 
+                                                      Foreground="{StaticResource DarkAccentBrush}"/>
+                                        </StackPanel>
+
+                                        <!-- Device List -->
+                                        <ItemsControl ItemsSource="{Binding DeviceBindings}">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <StackPanel Orientation="Horizontal" Margin="10,1,0,1">
+                                                        <TextBlock Text="• " Foreground="{StaticResource DarkTextSecondaryBrush}" FontSize="10"/>
+                                                        <TextBlock Text="{Binding DeviceName}" FontWeight="SemiBold" FontSize="10"/>
+                                                        <TextBlock Text=" (" Foreground="{StaticResource DarkTextSecondaryBrush}" FontSize="10"/>
+                                                        <TextBlock Text="{Binding Intensity, StringFormat=P0}" Foreground="{StaticResource DarkTextSecondaryBrush}" FontSize="10"/>
+                                                        <TextBlock FontSize="10" Foreground="{StaticResource DarkTextSecondaryBrush}">
+                                                            <TextBlock.Style>
+                                                                <Style TargetType="TextBlock" BasedOn="{StaticResource DarkTextBlockStyle}">
+                                                                    <Style.Triggers>
+                                                                        <DataTrigger Binding="{Binding IsHoldMode}" Value="True">
+                                                                            <Setter Property="Text" Value=", Hold Mode)"/>
+                                                                        </DataTrigger>
+                                                                        <DataTrigger Binding="{Binding IsHoldMode}" Value="False">
+                                                                            <Setter Property="Text" Value=", "/>
+                                                                        </DataTrigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </TextBlock.Style>
+                                                        </TextBlock>
+                                                        <TextBlock Text="{Binding DurationMs}" Foreground="{StaticResource DarkTextSecondaryBrush}" FontSize="10">
+                                                            <TextBlock.Style>
+                                                                <Style TargetType="TextBlock" BasedOn="{StaticResource DarkTextBlockStyle}">
+                                                                    <Style.Triggers>
+                                                                        <DataTrigger Binding="{Binding IsHoldMode}" Value="True">
+                                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                                        </DataTrigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </TextBlock.Style>
+                                                        </TextBlock>
+                                                        <TextBlock Text="ms)" Foreground="{StaticResource DarkTextSecondaryBrush}" FontSize="10">
+                                                            <TextBlock.Style>
+                                                                <Style TargetType="TextBlock" BasedOn="{StaticResource DarkTextBlockStyle}">
+                                                                    <Style.Triggers>
+                                                                        <DataTrigger Binding="{Binding IsHoldMode}" Value="True">
+                                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                                        </DataTrigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </TextBlock.Style>
+                                                        </TextBlock>
+                                                    </StackPanel>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+
+                    <StackPanel Grid.Column="1" Margin="5,0,0,0">
+                        <Button Content="Add Binding" 
+                                Command="{Binding AddControllerBindingCommand}"
+                                Style="{StaticResource DarkPrimaryButtonStyle}"
+                                Width="90" Height="30" Margin="0,0,0,5" FontSize="9"/>
+
+                        <Button Content="Remove Binding" 
+                                Command="{Binding RemoveControllerBindingCommand}"
+                                CommandParameter="{Binding SelectedControllerBinding}"
+                                Style="{StaticResource DarkDangerButtonStyle}"
+                                Width="90" Height="25" FontSize="10"/>
+                    </StackPanel>
+                </Grid>
+            </Grid>
+        </GroupBox>
+
+        <!-- Mouse Bindings Section -->
+        <GroupBox Grid.Row="4" Header="Mouse Bindings" Margin="10,5,10,10" Style="{StaticResource DarkGroupBoxStyle}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!-- Mouse Hook Controls -->
+                <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="5">
+                    <Button Content="Start Mouse Hook" 
+                            Command="{Binding StartMouseHookCommand}"
+                            Style="{StaticResource DarkPrimaryButtonStyle}"
+                            Width="130" Height="25" Margin="0,0,5,0"/>
+
+                    <Button Content="Stop Mouse Hook" 
+                            Command="{Binding StopMouseHookCommand}"
+                            Style="{StaticResource DarkButtonStyle}"
+                            Width="130" Height="25" Margin="0,0,5,0"/>
+
+                    <TextBlock Text="{Binding MouseHookActive, StringFormat='Active: {0}'}" 
+                              VerticalAlignment="Center" Margin="5,0,0,0"
+                              FontWeight="Bold" FontSize="11"/>
+                </StackPanel>
+
+                <!-- Mouse Bindings List -->
+                <Grid Grid.Row="1" Margin="5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <ListBox Grid.Column="0" ItemsSource="{Binding MouseBindings}"
+                             SelectedItem="{Binding SelectedMouseBinding}"
+                             Style="{StaticResource DarkListBoxStyle}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Border BorderBrush="{StaticResource DarkBorderBrush}" BorderThickness="1" 
+                                        Padding="8" Margin="2" CornerRadius="3"
+                                        Background="{StaticResource DarkSurfaceLightBrush}">
+                                    <StackPanel>
+                                        <!-- Mouse Input and Device Count -->
+                                        <StackPanel Orientation="Horizontal" Margin="0,0,0,3">
+                                            <TextBlock Text="{Binding Input}" 
+                                                      FontWeight="Bold" FontSize="12"
+                                                      Foreground="{StaticResource DarkAccentBrush}"/>
+                                            <TextBlock Text="{Binding DeviceBindings.Count, StringFormat=' → {0} device(s)'}" 
+                                                      FontWeight="Bold" FontSize="12" 
+                                                      Foreground="{StaticResource DarkAccentBrush}"/>
+                                        </StackPanel>
+
+                                        <!-- Device List -->
+                                        <ItemsControl ItemsSource="{Binding DeviceBindings}">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <StackPanel Orientation="Horizontal" Margin="10,1,0,1">
+                                                        <TextBlock Text="• " Foreground="{StaticResource DarkTextSecondaryBrush}" FontSize="10"/>
+                                                        <TextBlock Text="{Binding DeviceName}" FontWeight="SemiBold" FontSize="10"/>
+                                                        <TextBlock Text=" (" Foreground="{StaticResource DarkTextSecondaryBrush}" FontSize="10"/>
+                                                        <TextBlock Text="{Binding Intensity, StringFormat=P0}" Foreground="{StaticResource DarkTextSecondaryBrush}" FontSize="10"/>
+                                                        <TextBlock FontSize="10" Foreground="{StaticResource DarkTextSecondaryBrush}">
+                                                            <TextBlock.Style>
+                                                                <Style TargetType="TextBlock" BasedOn="{StaticResource DarkTextBlockStyle}">
+                                                                    <Style.Triggers>
+                                                                        <DataTrigger Binding="{Binding IsHoldMode}" Value="True">
+                                                                            <Setter Property="Text" Value=", Hold Mode)"/>
+                                                                        </DataTrigger>
+                                                                        <DataTrigger Binding="{Binding IsHoldMode}" Value="False">
+                                                                            <Setter Property="Text" Value=", "/>
+                                                                        </DataTrigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </TextBlock.Style>
+                                                        </TextBlock>
+                                                        <TextBlock Text="{Binding DurationMs}" Foreground="{StaticResource DarkTextSecondaryBrush}" FontSize="10">
+                                                            <TextBlock.Style>
+                                                                <Style TargetType="TextBlock" BasedOn="{StaticResource DarkTextBlockStyle}">
+                                                                    <Style.Triggers>
+                                                                        <DataTrigger Binding="{Binding IsHoldMode}" Value="True">
+                                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                                        </DataTrigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </TextBlock.Style>
+                                                        </TextBlock>
+                                                        <TextBlock Text="ms)" Foreground="{StaticResource DarkTextSecondaryBrush}" FontSize="10">
+                                                            <TextBlock.Style>
+                                                                <Style TargetType="TextBlock" BasedOn="{StaticResource DarkTextBlockStyle}">
+                                                                    <Style.Triggers>
+                                                                        <DataTrigger Binding="{Binding IsHoldMode}" Value="True">
+                                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                                        </DataTrigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </TextBlock.Style>
+                                                        </TextBlock>
+                                                    </StackPanel>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+
+                    <StackPanel Grid.Column="1" Margin="5,0,0,0">
+                        <Button Content="Add Binding" 
+                                Command="{Binding AddMouseBindingCommand}"
+                                Style="{StaticResource DarkPrimaryButtonStyle}"
+                                Width="90" Height="30" Margin="0,0,0,5" FontSize="9"/>
+
+                        <Button Content="Remove Binding" 
+                                Command="{Binding RemoveMouseBindingCommand}"
+                                CommandParameter="{Binding SelectedMouseBinding}"
+                                Style="{StaticResource DarkDangerButtonStyle}"
+                                Width="90" Height="25" FontSize="10"/>
+                    </StackPanel>
+                </Grid>
+            </Grid>
+        </GroupBox>
+
+        <!-- Status Bar -->
+        <StatusBar Grid.Row="5" Height="25" Style="{StaticResource DarkStatusBarStyle}">
+            <StatusBarItem Style="{StaticResource DarkStatusBarItemStyle}">
+                <TextBlock Text="{Binding Devices.Count, StringFormat='Devices: {0}'}" 
+                          Margin="5,0"/>
+            </StatusBarItem>
+            <Separator Style="{StaticResource DarkSeparatorStyle}"/>
+            <StatusBarItem Style="{StaticResource DarkStatusBarItemStyle}">
+                <TextBlock Text="{Binding KeyBindings.Count, StringFormat='Key Bindings: {0}'}" 
+                          Margin="5,0"/>
+            </StatusBarItem>
+            <Separator Style="{StaticResource DarkSeparatorStyle}"/>
+            <StatusBarItem Style="{StaticResource DarkStatusBarItemStyle}">
+                <TextBlock Text="{Binding ControllerBindings.Count, StringFormat='Controller Bindings: {0}'}" 
+                          Margin="5,0"/>
+            </StatusBarItem>
+            <Separator Style="{StaticResource DarkSeparatorStyle}"/>
+            <StatusBarItem Style="{StaticResource DarkStatusBarItemStyle}">
+                <TextBlock Text="{Binding MouseBindings.Count, StringFormat='Mouse Bindings: {0}'}" 
+                          Margin="5,0"/>
+            </StatusBarItem>
+        </StatusBar>
+    </Grid>
+</Window>

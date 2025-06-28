@@ -1,0 +1,70 @@
+﻿<Application x:Class="ToyControlApp.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <!-- Include Dark Theme -->
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="DarkTheme.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <!-- Apply Dark Theme Styles Globally -->
+            <Style TargetType="Window" BasedOn="{StaticResource DarkWindowStyle}"/>
+            <Style TargetType="Button" BasedOn="{StaticResource DarkButtonStyle}"/>
+            <Style TargetType="TextBox" BasedOn="{StaticResource DarkTextBoxStyle}"/>
+            <Style TargetType="ComboBox" BasedOn="{StaticResource DarkComboBoxStyle}"/>
+            <Style TargetType="ComboBoxItem" BasedOn="{StaticResource DarkComboBoxItemStyle}"/>
+            <Style TargetType="CheckBox" BasedOn="{StaticResource DarkCheckBoxStyle}"/>
+            <Style TargetType="Slider" BasedOn="{StaticResource DarkSliderStyle}"/>
+            <Style TargetType="GroupBox" BasedOn="{StaticResource DarkGroupBoxStyle}"/>
+            <Style TargetType="ListBox" BasedOn="{StaticResource DarkListBoxStyle}"/>
+            <Style TargetType="ListBoxItem" BasedOn="{StaticResource DarkListBoxItemStyle}"/>
+            <Style TargetType="Label" BasedOn="{StaticResource DarkLabelStyle}"/>
+            <Style TargetType="TextBlock" BasedOn="{StaticResource DarkTextBlockStyle}"/>
+            <Style TargetType="StatusBar" BasedOn="{StaticResource DarkStatusBarStyle}"/>
+            <Style TargetType="StatusBarItem" BasedOn="{StaticResource DarkStatusBarItemStyle}"/>
+            <Style TargetType="ScrollViewer" BasedOn="{StaticResource DarkScrollViewerStyle}"/>
+            <Style TargetType="ScrollBar" BasedOn="{StaticResource DarkScrollBarStyle}"/>
+            <Style TargetType="Separator" BasedOn="{StaticResource DarkSeparatorStyle}"/>
+            <Style TargetType="UniformGrid" BasedOn="{StaticResource DarkUniformGridStyle}"/>
+
+            <!-- ItemsControl Template for dark backgrounds -->
+            <Style TargetType="ItemsControl">
+                <Setter Property="Background" Value="Transparent"/>
+            </Style>
+
+            <!-- Popup and ContextMenu Dark Styles -->
+            <Style TargetType="Popup">
+                <Setter Property="AllowsTransparency" Value="True"/>
+            </Style>
+
+            <!-- ContextMenu Dark Style -->
+            <Style TargetType="ContextMenu">
+                <Setter Property="Background" Value="{StaticResource DarkSurfaceBrush}"/>
+                <Setter Property="Foreground" Value="{StaticResource DarkTextBrush}"/>
+                <Setter Property="BorderBrush" Value="{StaticResource DarkBorderBrush}"/>
+                <Setter Property="BorderThickness" Value="1"/>
+            </Style>
+
+            <!-- MenuItem Dark Style -->
+            <Style TargetType="MenuItem">
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="Foreground" Value="{StaticResource DarkTextBrush}"/>
+                <Style.Triggers>
+                    <Trigger Property="IsHighlighted" Value="True">
+                        <Setter Property="Background" Value="{StaticResource DarkAccentBrush}"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+            <!-- ToolTip Dark Style -->
+            <Style TargetType="ToolTip">
+                <Setter Property="Background" Value="{StaticResource DarkSurfaceLightBrush}"/>
+                <Setter Property="Foreground" Value="{StaticResource DarkTextBrush}"/>
+                <Setter Property="BorderBrush" Value="{StaticResource DarkBorderBrush}"/>
+                <Setter Property="BorderThickness" Value="1"/>
+            </Style>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
