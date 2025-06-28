@@ -87,13 +87,6 @@
                          DisplayMemberPath="Name"
                          Height="80" Margin="5"
                          Style="{StaticResource DarkListBoxStyle}"/>
-
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="5">
-                    <Button Content="Stop All Devices" 
-                            Command="{Binding StopAllDevicesCommand}"
-                            Style="{StaticResource DarkDangerButtonStyle}"
-                            Width="120" Height="25"/>
-                </StackPanel>
             </StackPanel>
         </GroupBox>
 
