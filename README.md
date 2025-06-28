@@ -29,13 +29,20 @@ A Windows application that uses [Intiface Central](https://intiface.com/central/
 
 1. Download and install Intiface Central from https://intiface.com/central/
 2. Run Intiface Central, start the server, go to devices, hit start scanning, it should detect your toys and connect automatically.
-3. Launch VibeMapper and click connect.
-4. Create a new profile in "Manage Profiles".
+3. Grab VibeMapper from [Releases page]([link](https://github.com/LivingTh1ng/VibeMapper/releases)), launch it, and click connect.
+4. Create a new profile in "Manage Profiles" and load it.
 5. Click "Add Binding" in any of the three boxes to add a keyboard, controller, or mouse binding.
 6. Select input key, what device to bind it to, duration and intensity (you can bind multiple devices here at a time with different settings each) click ok to add binding for this key.
 7. Save profile, and start the relevant hooks when ready to play, to deactivate hit stop hook buttons or press F8 as an emergency off switch.
 
 This did not happen on my machines but Windows Defender might tell you this app or Intiface Central is a virus, this is probably because of the mouse, keyboard, and controller hooks, feel free to tell it to kick rocks.
+
+## Safety & Privacy
+- This app runs with global input hooks - it can see your keystrokes/clicks when active
+- Your device connection data stays local, nothing gets sent anywhere
+- If you don't believe me just check the code
+- Use F8 panic button if things get weird
+- Don't blame me if you accidentally activate something during a work meeting
 
 ## Special Thanks
 Special thanks to [Izzy Sullivan](https://www.instagram.com/izzy_sullivan_designs/) for the adorable logo.
